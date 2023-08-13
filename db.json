@@ -1,0 +1,152 @@
+{
+  "movies": [
+    {
+      "id": 1,
+      "name": "Fly a kite",
+      "duration": 85,
+      "genre": "Fantasy",
+      "views": 1200
+    },
+    {
+      "id": 2,
+      "name": "Summer Bay",
+      "duration": 110,
+      "genre": "Adventure",
+      "views": 380
+    },
+    {
+      "id": 3,
+      "name": "Tide Ride",
+      "duration": 85,
+      "genre": "Drama",
+      "views": 215
+    },
+    {
+      "id": 4,
+      "name": "Capnella",
+      "duration": 95,
+      "genre": "Drama",
+      "views": 650
+    },
+    {
+      "id": 5,
+      "name": "Chemicals",
+      "duration": 88,
+      "genre": "Science Fiction",
+      "views": 1020
+    }
+  ],
+  "reviews": [
+    {
+      "id": 1,
+      "movieId": 2,
+      "reviewer": "Stuart Bezel",
+      "comment": null,
+      "rating": 5
+    },
+    {
+      "id": 2,
+      "movieId": 3,
+      "reviewer": "Neil Kroch",
+      "comment": "Good movie",
+      "rating": 4
+    },
+    {
+      "id": 3,
+      "movieId": 1,
+      "reviewer": "Stuart Bezel",
+      "comment": null,
+      "rating": 3
+    },
+    {
+      "id": 4,
+      "movieId": 1,
+      "reviewer": "Daniel Junior",
+      "comment": null,
+      "rating": 4
+    },
+    {
+      "id": 5,
+      "movieId": 1,
+      "reviewer": "Joana Meldy",
+      "comment": "Nice movie",
+      "rating": 4
+    },
+    {
+      "id": 6,
+      "movieId": 3,
+      "reviewer": "Ella Venedy",
+      "comment": null,
+      "rating": 5
+    },
+    {
+      "id": 7,
+      "movieId": 4,
+      "reviewer": "Stuart Bezel",
+      "comment": null,
+      "rating": 5
+    },
+    {
+      "id": 8,
+      "movieId": 3,
+      "reviewer": "Ella Venedy",
+      "comment": null,
+      "rating": 5
+    },
+    {
+      "id": 9,
+      "movieId": 5,
+      "reviewer": "Natalie Roberts",
+      "comment": null,
+      "rating": 4
+    },
+    {
+      "id": 10,
+      "movieId": 5,
+      "reviewer": "Joan Miller",
+      "comment": null,
+      "rating": 4
+    }
+  ],
+  "discounts": [
+    {
+      "id": 1,
+      "movideId": 1,
+      "amount": 1,
+      "type": "amount"
+    },
+    {
+      "id": 2,
+      "movideId": 5,
+      "amount": 20,
+      "type": "percentage"
+    }
+  ],
+  "prices": [
+    {
+      "id": 1,
+      "amount": 7,
+      "currency": "USD"
+    },
+    {
+      "id": 2,
+      "amount": 6,
+      "currency": "USD"
+    },
+    {
+      "id": 3,
+      "amount": 5,
+      "currency": "USD"
+    },
+    {
+      "id": 4,
+      "amount": 5,
+      "currency": "USD"
+    },
+    {
+      "id": 4,
+      "amount": 7,
+      "currency": "USD"
+    }
+  ]
+}
