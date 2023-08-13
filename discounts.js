@@ -27,7 +27,7 @@ const typeDefs = gql`
 
     extend type Movie @key(fields: "id") {
         id: ID! @external
-        discount: Discount
+        discountDetails: Discount
     }
 
     # Query type of the discounts graph returns the discounts graph shape
@@ -56,7 +56,7 @@ const resolvers = {
         }
     },
     Movie: {
-        async discount(parent) {
+        async discountDetails(parent) {
             const response = await fetch(`${apiUrl}/discounts/`);
             const discountsResponse = await response.json();
             const filteredResponse = discountsResponse.filter(
