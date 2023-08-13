@@ -2,7 +2,7 @@ const { ApolloServer, gql } = require("apollo-server");
 const { buildSubgraphSchema } = require("@apollo/subgraph");
 const fetch = require("node-fetch");
 
-const port = 4002;
+const port = 4003;
 const apiUrl = "http://localhost:3000";
 
 /**
@@ -10,35 +10,31 @@ const apiUrl = "http://localhost:3000";
  * All the defined types together define the "shape" of queries that are executed against the backend/data.
  */
 const typeDefs = gql`
-    # price type defines the queryable fields of price
-    # declaring Price as an entity by adding key fields
-    type Price @key(fields: "id") {
+    # discount type defines the queryable fields of discount
+    # declaring Discount as an entity by adding key fields
+    type Discount @key(fields: "id") {
         id: ID!
         entity: Movie
-        entityPrice: PriceDetails
-        serviceCharges: ServiceCharges
-    }
-
-    type PriceDetails {
+        validityPeriod: ValidityPeriod
         amount: Float
-        currency: String
+        type: String
     }
 
-    type ServiceCharges {
-        stream: PriceDetails
-        support: PriceDetails
+    type ValidityPeriod {
+        beginMonth: Int
+        endMonth: Int
     }
 
     extend type Movie @key(fields: "id") {
         id: ID! @external
-        price: Price
+        discount: Discount
     }
 
-    # Query type of the prices graph returns the prices graph shape
+    # Query type of the discounts graph returns the discounts graph shape
     # Extending the Query in subgraph because original Query definning in the federation gateway level
     type Query {
-        price(id: ID!): Price
-        prices: [Price]
+        discount(id: ID!): Discount
+        discounts: [Discount]
     }
 `;
 
@@ -47,23 +43,23 @@ const typeDefs = gql`
  */
 const resolvers = {
     Query: {
-        price(_, { id }) {
-            return fetch(`${apiUrl}/prices/${id}`).then(res => res.json());
+        discount(_, { id }) {
+            return fetch(`${apiUrl}/discounts/${id}`).then(res => res.json());
         },
-        prices() {
-            return fetch(`${apiUrl}/prices`).then(res => res.json());
+        discounts() {
+            return fetch(`${apiUrl}/discounts`).then(res => res.json());
         }
     },
-    Price: {
+    Discount: {
         entity(parent) {
             return {__typename: "Movie", id: parent.referenceEntityId}
         }
     },
     Movie: {
-        async price(parent) {
-            const response = await fetch(`${apiUrl}/prices/`);
-            const priceResponse = await response.json();
-            const filteredResponse = priceResponse.filter(
+        async discount(parent) {
+            const response = await fetch(`${apiUrl}/discounts/`);
+            const discountsResponse = await response.json();
+            const filteredResponse = discountsResponse.filter(
                 (price) => {
                     return price.referenceEntityId == parent.id;
                 }
@@ -86,5 +82,5 @@ const server = new ApolloServer({
 });
 
 server.listen({ port }).then(({ url }) => {
-    console.log(`Prices Sub Graph has successfully started and listening at ${url}`);
+    console.log(`Discounts Sub Graph has successfully started and listening at ${url}`);
 });

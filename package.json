@@ -18,6 +18,7 @@
     "server:rest": "json-server -q db.json",
     "server:movies": "nodemon movies.js",
     "server:prices": "nodemon prices.js",
+    "server:discounts": "nodemon discounts.js",
     "server:graphql": "nodemon index.js"
   },
   "author": "Pawara Gunawardena",

@@ -13,6 +13,9 @@ const gateway = new ApolloGateway({
         },
         {
             name: "prices", url: "http://localhost:4002"
+        },
+        {
+            name: "discounts", url: "http://localhost:4003"
         }
     ]
 });
