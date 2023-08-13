@@ -14,7 +14,7 @@ const typeDefs = gql`
     # declaring Price as an entity by adding key fields
     type Price @key(fields: "id") {
         id: ID!
-        referenceEntityId: Int
+        entity: Movie
         entityPrice: PriceDetails
         serviceCharges: ServiceCharges
     }
@@ -27,6 +27,10 @@ const typeDefs = gql`
     type ServiceCharges {
         stream: PriceDetails
         support: PriceDetails
+    }
+
+    extend type Movie @key(fields: "id") {
+        id: ID! @external
     }
 
     # Query type of the prices graph returns the prices graph shape
@@ -47,6 +51,11 @@ const resolvers = {
         },
         prices() {
             return fetch(`${apiUrl}/prices`).then(res => res.json());
+        }
+    },
+    Price: {
+        entity(parent) {
+            return {__typename: "Movie", id: parent.referenceEntityId}
         }
     }
 };

@@ -2,7 +2,7 @@ const { ApolloServer, gql } = require("apollo-server");
 const { buildSubgraphSchema } = require("@apollo/subgraph");
 const fetch = require("node-fetch");
 
-const port = 4001;
+const port = 4002;
 const apiUrl = "http://localhost:3000";
 
 /**
@@ -10,18 +10,20 @@ const apiUrl = "http://localhost:3000";
  * All the defined types together define the "shape" of queries that are executed against the backend/data.
  */
 const typeDefs = gql`
-    # movie type defines the queryable fields of Movie
-    type Movie @key(fields: "id"){
+    # review type defines the queryable fields of review
+    # declaring Review as an entity by adding key fields
+    type Review @key(fields: "id") {
         id: ID!
-        name: String
-        duration: Int
-        genre: String
-        views: Int
+        movieId: Int
+        reviewer: String
+        comment: String
+        rating: Int
     }
-    # Query type of the movies graph returns the movies graph shape
+    # Query type of the reviews graph returns the reviews graph shape
+    # Extending the Query in subgraph because original Query definning in the federation gateway level
     type Query {
-        movie(id: ID!): Movie
-        movies: [Movie]
+        review(id: ID!): Review
+        reviews: [Review]
     }
 `;
 
@@ -30,19 +32,11 @@ const typeDefs = gql`
  */
 const resolvers = {
     Query: {
-        movie(_, { id }) {
-            return fetch(`${apiUrl}/movies/${id}`).then(res => res.json());
+        review(_, { id }) {
+            return fetch(`${apiUrl}/reviews/${id}`).then(res => res.json());
         },
-        movies() {
-            return fetch(`${apiUrl}/movies`).then(res => res.json());
-        }
-    },
-    Movie: {
-        __resolveReference(ref) {
-            return fetch(`${apiUrl}/movies/${ref.id}`)
-                .then(
-                    res => res.json()
-                );
+        reviews() {
+            return fetch(`${apiUrl}/reviews`).then(res => res.json());
         }
     }
 };
@@ -60,5 +54,5 @@ const server = new ApolloServer({
 });
 
 server.listen({ port }).then(({ url }) => {
-    console.log(`Movies Sub Graph has successfully started and listening at ${url}`);
+    console.log(`Reviews Sub Graph has successfully started and listening at ${url}`);
 });
