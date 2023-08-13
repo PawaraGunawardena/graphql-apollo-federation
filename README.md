@@ -52,3 +52,28 @@ GraphQL Apollo Federation Project
                 views
             }
         }
+
+        query Movie {
+            movie(id:1) {
+                id
+                name
+                genre
+                duration
+                views
+                priceDetails {
+                entityPrice {
+                    amount
+                }
+                }
+                discountDetails
+                {
+                amount
+                validityPeriod {
+                    beginMonth
+                    endMonth
+                }
+                }
+                discountedAmount
+                finalPrice
+            }
+        }
