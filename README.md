@@ -33,22 +33,22 @@ GraphQL Apollo Federation Project
 
 6. Run query against GraphQL endpoint
 
-    query Movies {
-        movies {
-            id
-            name
-            genre
-            duration
-            views
+        query Movies {
+            movies {
+                id
+                name
+                genre
+                duration
+                views
+            }
         }
-    }
 
-    query Movie {
-        movie(id:2) {
-            id
-            name
-            genre
-            duration
-            views
+        query Movie {
+            movie(id:2) {
+                id
+                name
+                genre
+                duration
+                views
+            }
         }
-    }
