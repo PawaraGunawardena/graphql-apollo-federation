@@ -18,3 +18,37 @@ GraphQL Apollo Federation Project
             
         * Movies: 
             http://localhost:3000/discounts
+
+3. Install dependencies
+
+        npm install
+
+4. Run json server and graphql server (terminate if started the backend server separately)
+
+        npm run server
+
+5. Access the playground from the URL
+
+    http://localhost:4000/
+
+6. Run query against GraphQL endpoint
+
+    query Movies {
+        movies {
+            id
+            name
+            genre
+            duration
+            views
+        }
+    }
+
+    query Movie {
+        movie(id:2) {
+            id
+            name
+            genre
+            duration
+            views
+        }
+    }
