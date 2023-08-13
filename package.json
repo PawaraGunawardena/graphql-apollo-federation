@@ -17,6 +17,7 @@
     "server": "concurrently -k npm:server:*",
     "server:rest": "json-server -q db.json",
     "server:movies": "nodemon movies.js",
+    "server:prices": "nodemon prices.js",
     "server:graphql": "nodemon index.js"
   },
   "author": "Pawara Gunawardena",

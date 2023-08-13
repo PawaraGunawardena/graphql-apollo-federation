@@ -2,7 +2,7 @@ const { ApolloServer, gql } = require("apollo-server");
 const { buildSubgraphSchema } = require("@apollo/subgraph");
 const fetch = require("node-fetch");
 
-const port = 4001;
+const port = 4002;
 const apiUrl = "http://localhost:3000";
 
 /**
@@ -10,18 +10,30 @@ const apiUrl = "http://localhost:3000";
  * All the defined types together define the "shape" of queries that are executed against the backend/data.
  */
 const typeDefs = gql`
-    # movie type defines the queryable fields of Movie
-    type Movie @key(fields: "id"){
+    # price type defines the queryable fields of price
+    # declaring Price as an entity by adding key fields
+    type Price @key(fields: "id") {
         id: ID!
-        name: String
-        duration: Int
-        genre: String
-        views: Int
+        referenceEntityId: Int
+        entityPrice: PriceDetails
+        serviceCharges: ServiceCharges
     }
-    # Query type of the movies graph returns the movies graph shape
+
+    type PriceDetails {
+        amount: Float
+        currency: String
+    }
+
+    type ServiceCharges {
+        stream: PriceDetails
+        support: PriceDetails
+    }
+
+    # Query type of the prices graph returns the prices graph shape
+    # Extending the Query in subgraph because original Query definning in the federation gateway level
     type Query {
-        movie(id: ID!): Movie
-        movies: [Movie]
+        price(id: ID!): Price
+        prices: [Price]
     }
 `;
 
@@ -30,11 +42,11 @@ const typeDefs = gql`
  */
 const resolvers = {
     Query: {
-        movie(_, { id }) {
-            return fetch(`${apiUrl}/movies/${id}`).then(res => res.json());
+        price(_, { id }) {
+            return fetch(`${apiUrl}/prices/${id}`).then(res => res.json());
         },
-        movies() {
-            return fetch(`${apiUrl}/movies`).then(res => res.json());
+        prices() {
+            return fetch(`${apiUrl}/prices`).then(res => res.json());
         }
     }
 };
@@ -52,5 +64,5 @@ const server = new ApolloServer({
 });
 
 server.listen({ port }).then(({ url }) => {
-    console.log(`Movies Sub Graph has successfully started and listening at ${url}`);
+    console.log(`Prices Sub Graph has successfully started and listening at ${url}`);
 });

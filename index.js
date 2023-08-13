@@ -7,9 +7,14 @@ const port = 4000;
  * Gateway needs the subgraph service list as an argument
  */
 const gateway = new ApolloGateway({
-    serviceList: [{
-        name: "movies", url: "http://localhost:4001"
-    }]
+    serviceList: [
+        {
+            name: "movies", url: "http://localhost:4001"
+        },
+        {
+            name: "prices", url: "http://localhost:4002"
+        }
+    ]
 });
 
 const server = new ApolloServer({
