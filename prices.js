@@ -31,6 +31,7 @@ const typeDefs = gql`
 
     extend type Movie @key(fields: "id") {
         id: ID! @external
+        price: Price
     }
 
     # Query type of the prices graph returns the prices graph shape
@@ -56,6 +57,19 @@ const resolvers = {
     Price: {
         entity(parent) {
             return {__typename: "Movie", id: parent.referenceEntityId}
+        }
+    },
+    Movie: {
+        async price(parent) {
+            // console.log("HELLO", parent);
+            const response = await fetch(`${apiUrl}/prices/`);
+            const priceResponse = await response.json();
+            const filteredResponse = priceResponse.filter(
+                (price) => {
+                    return price.referenceEntityId == parent.id;
+                }
+            );
+            return filteredResponse[0];
         }
     }
 };
