@@ -18,7 +18,9 @@ const typeDefs = gql`
         genre: String
         views: Int
         discountDetails: Discount @external
+        priceDetails: Price @external
         discountedAmount: Int @requires(fields: "discountDetails { amount type validityPeriod { beginMonth endMonth } }")
+        finalPrice: Float @requires(fields: "discountDetails { amount type validityPeriod { beginMonth endMonth } } priceDetails { entityPrice { amount currency } serviceCharges { stream { amount currency } support { amount currency } } }")
     }
 
     extend type Discount @key(fields: "id") {
@@ -31,6 +33,22 @@ const typeDefs = gql`
     extend type ValidityPeriod {
         beginMonth: Int @external
         endMonth: Int @external
+    }
+
+    extend type Price @key(fields: "id") {
+        id: ID!
+        entityPrice: PriceDetails @external
+        serviceCharges: ServiceCharges @external
+    }
+
+    extend type PriceDetails {
+        amount: Float @external
+        currency: String @external
+    }
+
+    extend type ServiceCharges {
+        stream: PriceDetails @external
+        support: PriceDetails @external
     }
 
     # Query type of the movies graph returns the movies graph shape
@@ -58,8 +76,11 @@ const resolvers = {
                 .then(
                     res => res.json()
                 );
-
-            response.discountDetails = ref.discountDetails;
+            if(ref?.discountDetails)
+                response.discountDetails = ref.discountDetails;
+            if(ref?.priceDetails) {
+                response.priceDetails = ref.priceDetails;
+            }
             return response;
         },
         discountedAmount(parent) {
@@ -78,6 +99,29 @@ const resolvers = {
                 }
             }
             return discountedAmount;
+        },
+        finalPrice(parent){
+            let discountedAmount=0;
+
+            if(parent?.discountDetails?.validityPeriod) {
+                const d = new Date();
+                let thisMonth = d.getMonth();
+
+                if(parent.discountDetails.validityPeriod.beginMonth-1 <= thisMonth && thisMonth <= parent.discountDetails.validityPeriod.endMonth-1) {
+                    discountedAmount = parent.discountDetails.amount;
+                }
+            }
+            let totalPrice = 0;
+            if(parent?.priceDetails?.entityPrice?.amount) {
+                totalPrice += parent.priceDetails.entityPrice.amount;
+            }
+            if(parent?.priceDetails?.serviceCharges?.stream?.amount) {
+                totalPrice += parent.priceDetails.serviceCharges.stream.amount;
+            }
+            if(parent?.priceDetails?.serviceCharges?.support?.amount) {
+                totalPrice += parent.priceDetails.serviceCharges.support.amount;
+            }
+            return totalPrice - discountedAmount;
         }
     }
 };

@@ -31,7 +31,7 @@ const typeDefs = gql`
 
     extend type Movie @key(fields: "id") {
         id: ID! @external
-        price: Price
+        priceDetails: Price
     }
 
     # Query type of the prices graph returns the prices graph shape
@@ -60,7 +60,7 @@ const resolvers = {
         }
     },
     Movie: {
-        async price(parent) {
+        async priceDetails(parent) {
             const response = await fetch(`${apiUrl}/prices/`);
             const priceResponse = await response.json();
             const filteredResponse = priceResponse.filter(
